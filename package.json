@@ -1,0 +1,60 @@
+{
+  "name": "next-fe-starter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "TAILWIND_MODE=watch next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "husky install",
+    "codegen": "graphql-codegen --config codegen.yml"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.5.6",
+    "@polkadot/api": "^6.11.1",
+    "@polkadot/api-derive": "^6.11.1",
+    "apexcharts": "^3.32.0",
+    "bn.js": "^5.2.0",
+    "daisyui": "^1.16.2",
+    "dayjs": "^1.10.7",
+    "graphql": "^16.1.0",
+    "graphql-codegen-apollo-next-ssr": "^1.7.1",
+    "humanize-plus": "^1.8.2",
+    "lodash-es": "^4.17.21",
+    "next": "^12.0.5",
+    "postcss-import": "^13.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "rc-tooltip": "^5.1.1",
+    "react": "17.0.2",
+    "react-apexcharts": "^1.3.9",
+    "react-dom": "17.0.2",
+    "react-loading": "^2.0.3",
+    "sass": "^1.32.8"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
+    "@graphql-codegen/cli": "2.3.0",
+    "@graphql-codegen/introspection": "2.1.0",
+    "@graphql-codegen/typescript": "2.4.1",
+    "@graphql-codegen/typescript-operations": "2.2.1",
+    "@graphql-codegen/typescript-react-apollo": "3.2.2",
+    "@types/node": "^14.14.37",
+    "@types/react": "^17.0.3",
+    "autoprefixer": "^10.4.0",
+    "eslint": "8.4.0",
+    "eslint-config-next": "12.0.6",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "postcss": "^8.4.4",
+    "prettier": "^2.5.1",
+    "tailwindcss": "^2.2.19",
+    "typescript": "^4.5.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": "eslint --cache --fix",
+    "*.{js,ts,tsx,css,md}": "prettier --write"
+  }
+}
