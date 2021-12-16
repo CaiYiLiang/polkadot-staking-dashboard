@@ -1,47 +1,22 @@
-import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import Text from '../components/Text';
+import { useState } from 'react';
 import { useAppContext } from '../context/state';
-import { useGetChronicleQuery } from '../generated/graphql';
-import { ApiPromise, WsProvider } from '@polkadot/api';
 import Layout from '../components/Layout';
 import Sidebar from '../components/Sidebar';
 import { StakingStatsContent } from '../components';
-import { Calculator } from '../components/Calculator';
 import { getNetworkConfigs } from '../utils';
+import { Validators } from '../components/Validators';
 
 export default function Home() {
+  const [showValidators, setShowValidators] = useState(false);
   const { network, setNetwork, stakeReturn } = useAppContext();
   const onChangeNetwork = (choosedNetwork) => setNetwork(choosedNetwork);
   const networkConfigs = getNetworkConfigs(network);
   const { token } = networkConfigs;
-  // const {
-  //   data: chronicleData,
-  //   loading: fetchingChronicle,
-  //   error: fetchChronicleError,
-  // } = useGetChronicleQuery({
-  //   context: { clientName: network },
-  //   pollInterval: 9000,
-  //   notifyOnNetworkStatusChange: true,
-  // });
-  // console.log('data', chronicleData);
-  // const curBlock = chronicleData?.chronicle.curBlockNum;
-  // const curEra = chronicleData?.chronicle.curEra;
-
-  // useEffect(() => {
-  //   setCurBlockNum(curBlock);
-  //   setCurrentEra(curEra);
-  // }, [curBlock, currentEra]);
-
-  // useEffect(() => {
-  //   setCurBlockNum('-');
-  //   setCurrentEra('-');
-  // }, [network]);
 
   return (
     <section className="flex-1">
       <div className="h-full flex flex-col pt-4">
-        <div className="h-16 flex px-10">
+        <div className="h-16 flex px-10 justify-between items-center">
           <div className="dropdown dropdown-hover">
             <div tabIndex={0} className="m-1 btn btn-sm btn-outline btn-primary w-32">
               {network}
@@ -63,9 +38,33 @@ export default function Home() {
               </li>
             </ul>
           </div>
+          <div className="flex flex-row items-stretch w-1/6 content-around">
+            <button
+              className={`font-medium mx-4 ${
+                !showValidators
+                  ? `font-semibold text-subvis-primary-focus border-b-2 border-b-indigo-400`
+                  : `font-medium`
+              }`}
+              onClick={() => setShowValidators(false)}
+            >
+              Overview
+            </button>
+            <button
+              className={`font-medium mx-4 ${
+                showValidators
+                  ? `font-semibold text-subvis-primary-focus border-b-2 border-b-indigo-400`
+                  : `font-medium`
+              }`}
+              onClick={() => setShowValidators(true)}
+            >
+              Validator
+            </button>
+          </div>
+          <div className="">{new Date().toLocaleString()}</div>
         </div>
 
-        <StakingStatsContent />
+        {showValidators && <Validators />}
+        {!showValidators && <StakingStatsContent />}
       </div>
     </section>
   );

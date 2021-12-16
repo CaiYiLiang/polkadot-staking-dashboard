@@ -1,6 +1,14 @@
 import { gql } from '@apollo/client';
 
 export const GET_ERA_TOTAL_STAKING = gql`
+  query GetMetaData {
+    _metadata {
+      chain
+      specName
+      targetHeight
+      lastProcessedHeight
+    }
+  }
   query GetChronicle {
     chronicle(id: "Chronicle") {
       id

@@ -1,15 +1,33 @@
 overwrite: true
-schema: 'https://api.subquery.network/sq/subvis-io/kusama-staking-sum-memo__c3Vid'
-documents: 'queries/stakingQueries.ts'
 generates:
-  generated/graphql.tsx:
+  generated/totalStaking.tsx:
+    schema: 'https://api.subquery.network/sq/subvis-io/kusama-staking-sum-memo__c3Vid'
+    documents: 'queries/stakingQueries.ts'
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
     plugins:
+      - add:
+          content: '/* eslint-disable */'
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
       withHooks: true
-      refetch: true
-  ./graphql.schema.json:
+      withRefetchFn: true
+
+  generated/validators.tsx:
+    schema: 'https://api.subquery.network/sq/subvis-io/polkadot-staking-indexer-hackthon__c3Vid'
+    documents: 'queries/validatorQueries.ts'
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
     plugins:
-      - 'introspection'
+      - add:
+          content: '/* eslint-disable */'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      withHooks: true
+      withRefetchFn: true

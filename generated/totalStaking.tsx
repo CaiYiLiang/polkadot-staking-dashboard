@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -603,6 +604,22 @@ export type _Metadata = {
   targetHeight?: Maybe<Scalars['Int']>;
 };
 
+export type GetMetaDataQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMetaDataQuery = {
+  __typename?: 'Query';
+  _metadata?:
+    | {
+        __typename?: '_Metadata';
+        chain?: string | null | undefined;
+        specName?: string | null | undefined;
+        targetHeight?: number | null | undefined;
+        lastProcessedHeight?: number | null | undefined;
+      }
+    | null
+    | undefined;
+};
+
 export type GetChronicleQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetChronicleQuery = {
@@ -644,6 +661,56 @@ export type GetEraTotalStakingQuery = {
     | undefined;
 };
 
+export const GetMetaDataDocument = gql`
+  query GetMetaData {
+    _metadata {
+      chain
+      specName
+      targetHeight
+      lastProcessedHeight
+    }
+  }
+`;
+
+/**
+ * __useGetMetaDataQuery__
+ *
+ * To run a query within a React component, call `useGetMetaDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMetaDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMetaDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMetaDataQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMetaDataQuery, GetMetaDataQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetMetaDataQuery, GetMetaDataQueryVariables>(GetMetaDataDocument, options);
+}
+export function useGetMetaDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMetaDataQuery, GetMetaDataQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetMetaDataQuery, GetMetaDataQueryVariables>(
+    GetMetaDataDocument,
+    options
+  );
+}
+export type GetMetaDataQueryHookResult = ReturnType<typeof useGetMetaDataQuery>;
+export type GetMetaDataLazyQueryHookResult = ReturnType<typeof useGetMetaDataLazyQuery>;
+export type GetMetaDataQueryResult = Apollo.QueryResult<
+  GetMetaDataQuery,
+  GetMetaDataQueryVariables
+>;
+export function refetchGetMetaDataQuery(variables?: GetMetaDataQueryVariables) {
+  return { query: GetMetaDataDocument, variables: variables };
+}
 export const GetChronicleDocument = gql`
   query GetChronicle {
     chronicle(id: "Chronicle") {
@@ -695,6 +762,9 @@ export type GetChronicleQueryResult = Apollo.QueryResult<
   GetChronicleQuery,
   GetChronicleQueryVariables
 >;
+export function refetchGetChronicleQuery(variables?: GetChronicleQueryVariables) {
+  return { query: GetChronicleDocument, variables: variables };
+}
 export const GetEraTotalStakingDocument = gql`
   query GetEraTotalStaking {
     stakings(orderBy: BLOCK_NUM_DESC) {
@@ -753,3 +823,6 @@ export type GetEraTotalStakingQueryResult = Apollo.QueryResult<
   GetEraTotalStakingQuery,
   GetEraTotalStakingQueryVariables
 >;
+export function refetchGetEraTotalStakingQuery(variables?: GetEraTotalStakingQueryVariables) {
+  return { query: GetEraTotalStakingDocument, variables: variables };
+}

@@ -16,3 +16,20 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.table thead th {
+  background-color: white;
+}
+
+.table tbody th {
+  background-color: white;
+}
+
+.table:not(.table-zebra) tbody tr:not(:last-child) td,
+.table:not(.table-zebra) tbody tr:not(:last-child) th,
+.table:not(.table-zebra) tfoot tr:not(:last-child) td,
+.table:not(.table-zebra) tfoot tr:not(:last-child) th,
+.table:not(.table-zebra) thead tr:not(:last-child) td,
+.table:not(.table-zebra) thead tr:not(:last-child) th {
+  border-color: rgb(245 243 255);
+}

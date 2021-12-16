@@ -11,7 +11,7 @@ import {
 } from '../utils';
 import { LINKS } from '../constants';
 
-import { useGetEraTotalStakingQuery, useGetChronicleQuery } from '../generated/graphql';
+import { useGetEraTotalStakingQuery, useGetChronicleQuery } from '../generated/totalStaking';
 import { TVLStatCards } from './TVLStatCards';
 import { ErrorCard } from './ErrorCard';
 import { useAppContext } from '../context/state';
@@ -32,6 +32,7 @@ export const StakingStatsContent = () => {
     context: { clientName: network },
     pollInterval: 6000,
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
   });
 
   console.log('chronicleData', chronicleData?.chronicle);
@@ -122,42 +123,5 @@ export const StakingStatsContent = () => {
         <Calculator returnRate={stakeReturn} unit={token} amount={1000} />
       </div>
     </div>
-
-    // <div className="h-full flex flex-col justify-between">
-    //   <div className="flex flex-col items-start justify-between mb-4 md:flex-row md:items-center">
-    //     <div className="text-2xl font-bold">{`Staking TVL (${token.toUpperCase()})`}</div>
-    //     <div className="text-start md:text-right md:mx-3">
-    //       {curEra && (
-    //         <div className="text-sm text-gray-700">{`Era: ${curEra.toLocaleString()}`}</div>
-    //       )}
-    //       {curBlockNum && (
-    //         <div className="text-sm text-gray-700">{`Block: ${curBlockNum.toLocaleString()}`}</div>
-    //       )}
-    //     </div>
-    //   </div>
-
-    //   <div className="h-4/5 flex md:flex-row flex-col">
-    //     <div className="md:w-3/4 bg-white rounded-xl p-1 sm:p-4 w-full">
-    //       {!!fetchingStakingError && <ErrorCard />}
-    //       {isLoading && <Loading />}
-    //       {!isLoading && !fetchingStakingError && (
-    //         <TVLChart xData={date} yData={stakingAmount} blockNum={blockNum} time={time} />
-    //       )}
-    //     </div>
-
-    //     <TVLStatCards
-    //       totalStaked={totalStaked?.toString()}
-    //       curTotalIssuance={curTotalIssuance?.toString()}
-    //       curAuctionCounter={curAuctionCounter || 0}
-    //     />
-    //   </div>
-    //   <div className="my-4 text-xs">
-    //     You can find the staking TVL index set up on
-    //     <a className="link ml-1" href={LINKS.subquery} target="_blank" rel="noreferrer">
-    //       SubQuery
-    //     </a>
-    //     . Welcome to use the API and give us credit 🤘
-    //   </div>
-    // </div>
   );
 };
