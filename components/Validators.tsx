@@ -52,9 +52,17 @@ export const Validators = () => {
     context: { clientName: `${network}_validators` },
     pollInterval: 6000,
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
   });
 
-  const { stakingValidatorCount } = eraStakingData?.stakings.nodes[0] || {};
+  const {
+    stakingValidatorCount,
+    counterForValidators,
+    counterForNominators,
+    stakingEraRewardPoints,
+  } = eraStakingData?.stakings.nodes[0] || {};
+
+  const { stakingEraPayout } = eraStakingData?.stakings.nodes[1] || {};
 
   const {
     data: validatorData,
@@ -109,8 +117,37 @@ export const Validators = () => {
     });
   }
 
+  console.log(
+    `stakingValidatorCount ${stakingValidatorCount} stakingEraPayout ${stakingEraPayout}`
+  );
+  const statsCards = [
+    {
+      label: 'Active Validators',
+      value: totalCount || stakingValidatorCount,
+    },
+    {
+      label: 'Waiting',
+      value:
+        counterForValidators && totalCount && counterForValidators > totalCount
+          ? counterForValidators - totalCount
+          : '-',
+    },
+    {
+      label: 'Nominators',
+      value: counterForNominators,
+    },
+    {
+      label: 'Reward points / Era',
+      value: stakingEraRewardPoints,
+    },
+    {
+      label: 'Payout/Last Era',
+      value: parseBigInt(stakingEraPayout, decimal),
+    },
+  ];
+
   return (
-    <div className="bg-mainBg px-8 py-4 h-full">
+    <div className="bg-mainBg px-10 py-4 h-full">
       <div className="h-12 flex justify-between align-center my-4">
         <div className="card-title text-header">
           <h4>Staking stats</h4>
@@ -119,6 +156,14 @@ export const Validators = () => {
           <div>Era: {curEra}</div>
           <div>Block: {curBlockNum}</div>
         </div>
+      </div>
+      <div className="w-full flex justify-between my-8 bg-white px-5 py-6 rounded-3xl">
+        {statsCards.map((stakingStat, idx) => (
+          <div key={`staking-stat-${idx}`}>
+            <div className="stat-title text-header">{stakingStat?.label}</div>
+            <div className="stat-value text-subvis-primary-focus">{stakingStat?.value || '-'}</div>
+          </div>
+        ))}
       </div>
       <ValidatorsTable data={sortedValidators} />
     </div>

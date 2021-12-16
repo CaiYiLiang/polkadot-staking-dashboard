@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import BN from 'bn.js';
 import {
   calcInflation,
@@ -8,7 +8,6 @@ import {
   toHumanNumber,
   toPercentage,
 } from '../utils';
-import { StatCard, StatCardBody, StatCardTitle } from '.';
 import { useAppContext } from '../context/state';
 
 const stakingTVLTooltip = {
@@ -63,7 +62,6 @@ export const TVLStatCards = ({
       auctionCounter: curAuctionCounter || 0,
     });
 
-  // console.log('inflationCalResult', inflationCalResult);
   const { stakedReturn, stakedFraction = 0, inflation } = inflationCalResult || {};
 
   // TODO: Improve
@@ -92,50 +90,14 @@ export const TVLStatCards = ({
     },
   ];
 
-  const crowdloanStatsInfo = [
-    {
-      label: 'Parachain TVL',
-      tooltip: parachainTVLTooltip,
-      value: 'Coming soon',
-    },
-    {
-      label: 'Auction TVL',
-      tooltip: auctionTVLTooltip,
-      value: 'Coming soon',
-    },
-  ];
-
   return (
     <div className="w-full flex justify-between">
       {stakingStatsInfo.map((stakingStat, idx) => (
         <div key={`staking-stat-${idx}`}>
           <div className="stat-title text-header">{stakingStat?.label}</div>
           <div className="stat-value text-subvis-primary-focus">{stakingStat?.value || '-'}</div>
-          {/* <div className="stat-desc">21% more than last month</div> */}
         </div>
       ))}
-      {/* <StatCard>
-        {stakingStatsInfo.map((stakingStat, idx) => (
-          <div
-            className="mb-1 sm:mb-2 mr-0.5 sm:mr-1.5 text-subvis-base-content"
-            key={`staking-stat-${idx}`}
-          >
-            <StatCardTitle text={stakingStat?.label} tooltip={stakingStat?.tooltip} />
-            <StatCardBody text={stakingStat?.value || '-'} />
-          </div>
-        ))}
-      </StatCard> */}
-
-      {/* <>
-        {crowdloanStatsInfo.map((crowdloanStat, idx) => (
-          <div className="mt-4" key={`crowdloan-stat-${idx}`}>
-            <StatCard inactive>
-              <StatCardTitle text={crowdloanStat.label} tooltip={crowdloanStat.tooltip[network]} />
-              <StatCardBody disabled>{crowdloanStat.value}</StatCardBody>
-            </StatCard>
-          </div>
-        ))}
-      </> */}
     </div>
   );
 };
