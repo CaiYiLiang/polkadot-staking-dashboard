@@ -8,9 +8,17 @@ import {
 } from '../generated/validators';
 import { useAppContext } from '../context/state';
 import { ValidatorsTable } from './VlidatorsTable';
+import { AiOutlineAreaChart } from 'react-icons/ai';
+import { useState } from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { HistoryCharts } from './HistoryCharts';
 
 // NOTE: CurBlock info
 export const Validators = () => {
+  const [showRewardPointHistoy, setShowRewardPointHistoy] = useState(false);
+  const [yData, setYData] = useState<any[]>();
+  const [xData, setXData] = useState<any[]>();
   const { network, stakeReturn } = useAppContext();
   const networkConfigs = getNetworkConfigs(network);
   const { token, decimal } = networkConfigs;
@@ -62,6 +70,18 @@ export const Validators = () => {
   } = eraStakingData?.stakings.nodes[0] || {};
 
   const { stakingEraPayout } = eraStakingData?.stakings.nodes[1] || {};
+  const eraStakingHistory = eraStakingData?.stakings.nodes;
+  console.log('eraStakingHistory', eraStakingHistory);
+  const eraHistory = eraStakingHistory?.map((history) => history.id);
+  const rewardsHistory = eraStakingHistory?.map((history) => history.stakingEraRewardPoints);
+
+  // if (eraStakingHistory?.length > 0) {
+  //   const eraHistory = eraStakingHistory.map((history) => history.id);
+  //   const rewardsHistory = eraStakingHistory.map((history) => history.stakingEraRewardPoints);
+
+  //   setYData(rewardsHistory);
+  //   setXData(eraHistory);
+  // }
 
   const {
     data: validatorData,
@@ -159,12 +179,23 @@ export const Validators = () => {
       <div className="w-full flex justify-between my-8 bg-white px-5 py-6 rounded-3xl">
         {statsCards.map((stakingStat, idx) => (
           <div key={`staking-stat-${idx}`}>
-            <div className="stat-title text-header">{stakingStat?.label}</div>
+            <div className="stat-title text-header flex items-center">
+              {stakingStat?.label}
+              {/* {stakingStat?.label === 'Reward points / Era' && (
+                <AiOutlineAreaChart
+                  className="ml-2 cursor-pointer"
+                  onClick={() => setShowRewardPointHistoy(true)}
+                />
+              )} */}
+            </div>
             <div className="stat-value text-subvis-primary-focus">{stakingStat?.value || '-'}</div>
           </div>
         ))}
       </div>
       <ValidatorsTable data={sortedValidators} />
+      {/* <Popup open={showRewardPointHistoy} position="right center" closeOnDocumentClick>
+        <HistoryCharts yData={rewardsHistory} xData={eraHistory} />
+      </Popup> */}
     </div>
   );
 };

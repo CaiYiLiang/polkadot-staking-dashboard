@@ -46,7 +46,7 @@ export const GET_VALIDATORS = gql`
   }
 
   query GetEraStakings {
-    stakings(first: 7, orderBy: BLOCK_NUM_DESC) {
+    stakings(first: 10, orderBy: BLOCK_NUM_DESC) {
       nodes {
         id
         blockNum

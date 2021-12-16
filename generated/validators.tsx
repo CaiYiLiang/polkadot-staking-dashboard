@@ -1688,7 +1688,7 @@ export function refetchGetValidatorsQuery(variables: GetValidatorsQueryVariables
 }
 export const GetEraStakingsDocument = gql`
   query GetEraStakings {
-    stakings(first: 7, orderBy: BLOCK_NUM_DESC) {
+    stakings(first: 10, orderBy: BLOCK_NUM_DESC) {
       nodes {
         id
         blockNum
