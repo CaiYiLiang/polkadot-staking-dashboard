@@ -9,7 +9,7 @@ export const ValidatorsTable = ({ data }) => {
   const networkConfigs = getNetworkConfigs(network);
   const { token, decimal } = networkConfigs;
 
-  console.log('data', data);
+  //   console.log('data', data);
   const validatorsTableCols = [
     'validator',
     'Nominators',

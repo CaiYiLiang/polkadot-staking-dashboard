@@ -35,8 +35,6 @@ export const StakingStatsContent = () => {
     fetchPolicy: 'no-cache',
   });
 
-  console.log('chronicleData', chronicleData?.chronicle);
-  console.log('fetchChronicleError', fetchChronicleError);
   const { curBlockNum, curEra, curTotalIssuance, curAuctionCounter } =
     chronicleData?.chronicle || {};
 
@@ -89,8 +87,6 @@ export const StakingStatsContent = () => {
     [formatedStakings]
   );
   const { data: stakingAmount, date, blockNum, time } = stakingData;
-  // console.log('blockNum', blockNum);
-  console.log('stakeReturn', stakeReturn);
 
   const isLoading = fetchingStakingData && stakingAmount.length <= 0;
 

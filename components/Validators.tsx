@@ -12,10 +12,9 @@ import { ValidatorsTable } from './VlidatorsTable';
 // NOTE: CurBlock info
 export const Validators = () => {
   const { network, stakeReturn } = useAppContext();
-  console.log('network', network);
   const networkConfigs = getNetworkConfigs(network);
   const { token, decimal } = networkConfigs;
-  console.log('decimal', decimal);
+
   const {
     data: metaData,
     loading: isFetchingMetaData,

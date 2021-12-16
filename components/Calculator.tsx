@@ -23,7 +23,6 @@ export const Calculator = ({
 
   const onInputStakeAmount = (e) => {
     setIsInvalidInput(false);
-    console.log('input', e.target.value);
     setStakeAmount(e.target.value);
     const isValidateNumber = isPositiveNumber(e.target.value);
     if (isValidateNumber) {
