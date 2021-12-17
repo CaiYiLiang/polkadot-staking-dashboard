@@ -9,16 +9,16 @@ import {
 import { useAppContext } from '../context/state';
 import { ValidatorsTable } from './VlidatorsTable';
 import { AiOutlineAreaChart } from 'react-icons/ai';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { HistoryCharts } from './HistoryCharts';
+import { HistoryRecharts } from './HistoryRecharts';
 
 // NOTE: CurBlock info
 export const Validators = () => {
-  const [showRewardPointHistoy, setShowRewardPointHistoy] = useState(false);
-  const [yData, setYData] = useState<any[]>();
-  const [xData, setXData] = useState<any[]>();
+  const [showHistoyChart, setShowHistoyChart] = useState(false);
+  const [historyChartKey, setHistoryChartKey] = useState<String | null>();
   const { network, stakeReturn } = useAppContext();
   const networkConfigs = getNetworkConfigs(network);
   const { token, decimal } = networkConfigs;
@@ -70,18 +70,16 @@ export const Validators = () => {
   } = eraStakingData?.stakings.nodes[0] || {};
 
   const { stakingEraPayout } = eraStakingData?.stakings.nodes[1] || {};
-  const eraStakingHistory = eraStakingData?.stakings.nodes;
-  console.log('eraStakingHistory', eraStakingHistory);
-  const eraHistory = eraStakingHistory?.map((history) => history.id);
-  const rewardsHistory = eraStakingHistory?.map((history) => history.stakingEraRewardPoints);
+  const eraStakingHistory = eraStakingData?.stakings?.nodes?.slice(1);
 
-  // if (eraStakingHistory?.length > 0) {
-  //   const eraHistory = eraStakingHistory.map((history) => history.id);
-  //   const rewardsHistory = eraStakingHistory.map((history) => history.stakingEraRewardPoints);
-
-  //   setYData(rewardsHistory);
-  //   setXData(eraHistory);
-  // }
+  const xData = eraStakingHistory?.reverse().map((history) => history.id);
+  const yData = eraStakingHistory
+    ?.reverse()
+    .map((history) =>
+      historyChartKey === 'rewardPoints'
+        ? history.stakingEraRewardPoints
+        : parseBigInt(history.stakingEraPayout, decimal)
+    );
 
   const {
     data: validatorData,
@@ -143,6 +141,7 @@ export const Validators = () => {
     {
       label: 'Active Validators',
       value: totalCount || stakingValidatorCount,
+      key: 'activeValidator',
     },
     {
       label: 'Waiting',
@@ -150,18 +149,22 @@ export const Validators = () => {
         counterForValidators && totalCount && counterForValidators > totalCount
           ? counterForValidators - totalCount
           : '-',
+      key: 'waitingValidator',
     },
     {
       label: 'Nominators',
       value: counterForNominators,
+      key: 'nominators',
     },
     {
       label: 'Reward points / Era',
       value: stakingEraRewardPoints,
+      key: 'rewardPoints',
     },
     {
       label: 'Payout/Last Era',
       value: parseBigInt(stakingEraPayout, decimal),
+      key: 'payout',
     },
   ];
 
@@ -181,21 +184,38 @@ export const Validators = () => {
           <div key={`staking-stat-${idx}`}>
             <div className="stat-title text-header flex items-center">
               {stakingStat?.label}
-              {/* {stakingStat?.label === 'Reward points / Era' && (
+              {['rewardPoints', 'payout'].includes(stakingStat?.key) && (
                 <AiOutlineAreaChart
-                  className="ml-2 cursor-pointer"
-                  onClick={() => setShowRewardPointHistoy(true)}
+                  className="ml-2 cursor-pointer text-2xl font-bold text-subvis-primary"
+                  onClick={() => {
+                    setHistoryChartKey(stakingStat?.key);
+                    setShowHistoyChart(true);
+                  }}
                 />
-              )} */}
+              )}
             </div>
             <div className="stat-value text-subvis-primary-focus">{stakingStat?.value || '-'}</div>
           </div>
         ))}
       </div>
       <ValidatorsTable data={sortedValidators} />
-      {/* <Popup open={showRewardPointHistoy} position="right center" closeOnDocumentClick>
-        <HistoryCharts yData={rewardsHistory} xData={eraHistory} />
-      </Popup> */}
+      <Popup
+        open={showHistoyChart}
+        onClose={() => {
+          setHistoryChartKey(null);
+          setShowHistoyChart(false);
+        }}
+        position="right center"
+        closeOnDocumentClick
+      >
+        {yData?.length > 0 && xData?.length > 0 && (
+          <HistoryCharts
+            yData={yData.reverse()}
+            xData={xData.reverse()}
+            yDataTitle={historyChartKey === 'rewardPoints' ? 'Rewards Points' : 'Payout'}
+          />
+        )}
+      </Popup>
     </div>
   );
 };
